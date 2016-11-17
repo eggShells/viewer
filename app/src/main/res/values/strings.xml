@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Drawing Viewer</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string-array name="pdf_array">
+        <item>C110500-0000-00001M0</item>
+        <item>C110500-0000-00001M0</item>
+        <item>C110500-0000-00001G0</item>
+        <item>C310200-0000-00001LZ</item>
+        <item>C190400-E010-00001AZ</item>
+        <item>C230430-0000-00001A0</item>
+    </string-array>
+</resources>
