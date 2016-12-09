@@ -4,6 +4,7 @@ package com.blockhouse.drawingviewer;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,6 +49,11 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         MenuItem curMenuItem;
         Menu myMenu = navigationView.getMenu();
+        try {
+            Log.d("tag", NetworkAdapter.getWebPageContents("http://www.blockhouse.com"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int menuSize = myMenu.size();
         for(int i = 0; i<menuSize; i++){
             curMenuItem = myMenu.getItem(i);
@@ -118,3 +126,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 }
+
+    private void downloadImageAsync() {
+        // Now we can execute the long-running task at any time.
+        new MyAsyncTask().execute("http://images.com/image.jpg");
+    }
