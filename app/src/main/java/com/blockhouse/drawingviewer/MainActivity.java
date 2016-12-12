@@ -1,6 +1,7 @@
 
 package com.blockhouse.drawingviewer;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -35,8 +36,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                downloadImageAsync myImage = new downloadImageAsync();
+                myImage.execute("http://www.google.com");
             }
         });
 
@@ -49,11 +52,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         MenuItem curMenuItem;
         Menu myMenu = navigationView.getMenu();
-        try {
-            Log.d("tag", NetworkAdapter.getWebPageContents("http://www.blockhouse.com"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        downloadImageAsync();
         int menuSize = myMenu.size();
         for(int i = 0; i<menuSize; i++){
             curMenuItem = myMenu.getItem(i);
@@ -125,9 +124,20 @@ public class MainActivity extends AppCompatActivity
         navMenu.add(newItem);
 
     }
-}
 
-    private void downloadImageAsync() {
-        // Now we can execute the long-running task at any time.
-        new MyAsyncTask().execute("http://images.com/image.jpg");
+    private class downloadImageAsync extends AsyncTask<String, String, String>
+    {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String url = strings[0];
+            try {
+                Log.d("tag","before task");
+                Log.d("tag",NetworkAdapter.getWebPageContents(url));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
+}

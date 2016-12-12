@@ -1,5 +1,6 @@
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.blockhouse.drawingviewer.NetworkAdapter;
@@ -30,17 +31,18 @@ public class MyAsyncExample extends AsyncTask<String,Void,String> {
         return myReturnString;
     }
 
-    protected void onProgressUpdate(Progress... values) {
+//    protected void onProgressUpdate(Progress... values) {
         // Executes whenever publishProgress is called from doInBackground
         // Used to update the progress indicator
 //        progressBar.setProgress(values[0]);
-    }
+//    }
 
-    protected void onPostExecute(Bitmap result) {
+    protected void onPostExecute(String result) {
         // This method is executed in the UIThread
         // with access to the result of the long running task
 //        imageView.setImageBitmap(result);
         // Hide the progress bar
 //        progressBar.setVisibility(ProgressBar.INVISIBLE);
+        Log.d("msg",result);
     }
 }
