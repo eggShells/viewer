@@ -3,6 +3,7 @@ package com.blockhouse.drawingviewer;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -15,31 +16,58 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private String[] mPDFTitles;
     NavigationView navigationView;
+    TextView html;
+    MenuItem curMenuItem;
+    Menu myMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Date mCal;
+        mCal = Calendar.getInstance().getTime();
+        SimpleDateFormat mDate = new SimpleDateFormat("MM-dd-yyyy");
+        final String curDate = mDate.format(mCal);
+        Log.d("tag",curDate);
         //ID toolbar is defined in app_bar_main
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mPDFTitles = getResources().getStringArray(R.array.pdf_array);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        myMenu = navigationView.getMenu();
+//        myMenu.clear();
+        html = (TextView) findViewById(R.id.htmlView);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //should AsyncRequest be inside listener or outside?  difference?
+        final RequestDrawings myRequest = new RequestDrawings();
+        myRequest.execute(curDate);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                downloadImageAsync myImage = new downloadImageAsync();
-                myImage.execute("http://www.google.com");
+//                final RequestDrawings myRequest = new RequestDrawings();
+//                myRequest.execute(curDate);
+                DownloadFileFromURL myDownload = new DownloadFileFromURL();
+                myDownload.execute("C190400");
             }
         });
 
@@ -48,16 +76,6 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        MenuItem curMenuItem;
-        Menu myMenu = navigationView.getMenu();
-//        downloadImageAsync();
-        int menuSize = myMenu.size();
-        for(int i = 0; i<menuSize; i++){
-            curMenuItem = myMenu.getItem(i);
-            curMenuItem.setTitle(mPDFTitles[i]);
-        }
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -125,19 +143,115 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private class downloadImageAsync extends AsyncTask<String, String, String>
+    private class RequestDrawings extends AsyncTask<String, String, String>
     {
 
         @Override
         protected String doInBackground(String... strings) {
-            String url = strings[0];
+            String date = strings[0];
+            String HTMLresults = new String();
             try {
-                Log.d("tag","before task");
-                Log.d("tag",NetworkAdapter.getWebPageContents(url));
+                HTMLresults = NetworkAdapter.getScheduledItems("FIN",date);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            return HTMLresults;
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //html.setText(s);
+            Gson myGson = new GsonBuilder().create();
+            mPDFTitles = new String[100];
+//            mPDFTitles = new ArrayList();
+            mPDFTitles = myGson.fromJson(s,mPDFTitles.getClass());
+//            if mPDFTitles.length{
+                for(int i = 0; i < mPDFTitles.length; i++){
+                    curMenuItem = myMenu.getItem(i);
+                    curMenuItem.setTitle(mPDFTitles[i]);
+                }
+            super.onPostExecute(s);
+        }
+    }
+
+    /**
+     * Background Async Task to download file
+     * */
+    class DownloadFileFromURL extends AsyncTask<String, String, InputStream> {
+
+        /**
+         * Before starting background thread Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected InputStream doInBackground(String... f_url) {
+
+            InputStream myIS;
+            try {
+                myIS = NetworkAdapter.getDocument("C190400");
+                return myIS;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+//            return myIS;
+        }
+
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(InputStream file_url) {
+            // dismiss the dialog after the file was downloaded
+//            dismissDialog(progress_bar_type);
+            int count;
+            try {
+
+                // download the file
+                InputStream bis = new BufferedInputStream(file_url,
+                        8192);
+
+                // Output stream
+                OutputStream output = new FileOutputStream(Environment
+                        .getExternalStorageDirectory().toString()
+                        + "/C190400.pdf");
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = bis.read(data)) != -1) {
+                    total += count;
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                bis.close();
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+
+        }
+
     }
 }
