@@ -2,6 +2,7 @@ package com.blockhouse.drawingviewer;
 
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -38,17 +39,19 @@ public class NetworkAdapter {
         return myResponse.body().string();
     }
 
-    public static InputStream getDocument(String item) throws IOException{
+    public static byte[] getDocument(String item) throws IOException{
 
         OkHttpClient myClient = new OkHttpClient();
         //String url = "http://192.168.0.172:8888/servlet/";
         HttpUrl url = new HttpUrl.Builder().scheme("http").host("192.168.0.172").port(8888).addPathSegment("servlet").addPathSegment("AndroidServlet").addPathSegment("")
-                .addQueryParameter("get","document").addQueryParameter("item","C190400").build();
+                .addQueryParameter("get","document").addQueryParameter("item",item).build();
         Log.d("tag", String.valueOf(url));
         Request myRequest = new Request.Builder().url(url).build();
         Response myResponse = myClient.newCall(myRequest).execute();
-        Log.d("tag",myResponse.body().toString());
-        InputStream myInput = myResponse.body().byteStream();
-        return myInput;
+        byte[] mByteArray = myResponse.body().bytes();
+
+        myResponse.body().close();
+        myResponse.close();
+        return mByteArray;
     }
 }

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_render_pdf"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,11 +11,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.blockhouse.drawingviewer.MainActivity"
-    tools:showIn="@layout/app_bar_main">
-
-    <com.blockhouse.drawingviewer.ZoomView
-        android:id="@+id/pdfImg"
+    tools:context="com.blockhouse.drawingviewer.RenderPDF"
+    tools:showIn="@layout/activity_render_pdf">
+    <com.github.barteksc.pdfviewer.PDFView
+        android:id="@+id/pdfView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>
