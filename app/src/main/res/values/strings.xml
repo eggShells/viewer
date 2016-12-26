@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Drawing Viewer</string>
+    <string name="app_name">Blockhouse Assembly Viewer</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -13,4 +13,5 @@
         <item>C190400-E010-00001AZ</item>
         <item>C230430-0000-00001A0</item>
     </string-array>
+    <string name="title_activity_render_pdf">RenderPDF</string>
 </resources>
