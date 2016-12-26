@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity
     TextView html;
     MenuItem curMenuItem;
     Menu myMenu;
+    private ListView mScheduledItems;
+    private ArrayAdapter<String> mScheduledNavMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity
         SimpleDateFormat mDate = new SimpleDateFormat("MM-dd-yyyy");
         final String curDate = mDate.format(mCal);
         Log.d("tag",curDate);
+        mScheduledNavMenu = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mPDFTitles);
+        mScheduledItems.setAdapter(mScheduledNavMenu);
         //ID toolbar is defined in app_bar_main
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
