@@ -10,9 +10,9 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
 
-import it.sephiroth.android.library.imagezoom.ImageViewTouch;
+//import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
-import static it.sephiroth.android.library.imagezoom.ImageViewTouch.*;
+//import static it.sephiroth.android.library.imagezoom.ImageViewTouch.*;
 
 
 /**
