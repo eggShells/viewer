@@ -198,7 +198,8 @@ public class MainActivity extends AppCompatActivity
 //            mPDFTitles = new ArrayList();
             mPDFTitles = myGson.fromJson(s,mPDFTitles.getClass());
             if (mPDFTitles.length > 0){
-                for(int i = 0; i < mPDFTitles.length; i++){
+//                for(int i = 0; i < mPDFTitles.length; i++){
+                for(int i = 0; i < 5; i++){
                     curMenuItem = myMenu.getItem(i);
                     curMenuItem.setTitle(mPDFTitles[i]);
                 }

@@ -13,7 +13,7 @@ tools:context="com.blockhouse.drawingviewer.pdfView"
 tools:showIn="@layout/app_bar_main">
 
 <com.blockhouse.drawingviewer.ZoomView
-    android:id="@+id/pdfImg"
+    android:id="@+id/pdfBitmap"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 </RelativeLayout>
